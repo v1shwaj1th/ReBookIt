@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import API_URL from '../config';
 
 const AdminDashboard = () => {
   const [books, setBooks] = useState([]);
@@ -10,7 +11,7 @@ const AdminDashboard = () => {
 
   const fetchBooks = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/books');
+      const res = await axios.get(`${API_URL}/books`);
       setBooks(res.data);
     } catch (err) {
       console.error(err);
@@ -20,7 +21,7 @@ const AdminDashboard = () => {
   const handleDelete = async (id) => {
     if (confirm('Are you sure you want to remove this listing?')) {
         try {
-            await axios.delete(`http://localhost:5000/api/books/${id}`);
+            await axios.delete(`${API_URL}/books/${id}`);
             setBooks(books.filter(b => b._id !== id));
         } catch(err) {
             console.error(err);

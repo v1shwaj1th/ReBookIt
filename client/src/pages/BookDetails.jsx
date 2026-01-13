@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate, Navigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
+import API_URL from '../config';
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -20,10 +21,10 @@ const BookDetails = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/books/${id}`);
+        const res = await axios.get(`${API_URL}/books/${id}`);
         setBook(res.data);
         if (res.data.listingType === 'auction') {
-          const bidsRes = await axios.get(`http://localhost:5000/api/bids/${id}`);
+          const bidsRes = await axios.get(`${API_URL}/bids/${id}`);
           setBids(bidsRes.data);
         }
       } catch (err) {
@@ -38,7 +39,7 @@ const BookDetails = () => {
   const handlePlaceBid = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/bids', { bookId: id, bidAmount });
+      await axios.post(`${API_URL}/bids`, { bookId: id, bidAmount });
       alert('Bid placed successfully!');
       window.location.reload();
     } catch (err) {
@@ -49,7 +50,7 @@ const BookDetails = () => {
   const handleMakeOffer = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/offers', { bookId: id, offeredPrice: offerAmount });
+      await axios.post(`${API_URL}/offers`, { bookId: id, offeredPrice: offerAmount });
       alert('Offer sent successfully!');
     } catch (err) {
       alert(err.response?.data?.message || 'Error making offer');

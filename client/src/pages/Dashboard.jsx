@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import API_URL from '../config';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -17,19 +18,19 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         // Fetch My Listings
-        const booksRes = await axios.get('http://localhost:5000/api/books');
+        const booksRes = await axios.get(`${API_URL}/books`);
         setMyListings(booksRes.data.filter(book => book.sellerId._id === user.id || book.sellerId === user.id));
 
         // Fetch My Offers
-        const offersRes = await axios.get('http://localhost:5000/api/offers/my-offers');
+        const offersRes = await axios.get(`${API_URL}/offers/my-offers`);
         setMyOffers(offersRes.data);
         
         // Fetch Received Offers (for sellers)
-        const receivedRes = await axios.get('http://localhost:5000/api/offers/seller-received');
+        const receivedRes = await axios.get(`${API_URL}/offers/seller-received`);
         setReceivedOffers(receivedRes.data);
 
         // Fetch History
-        const historyRes = await axios.get('http://localhost:5000/api/payment/history', {
+        const historyRes = await axios.get(`${API_URL}/payment/history`, {
              headers: { 'x-auth-token': localStorage.getItem('token') }
         });
         setHistory(historyRes.data);
@@ -43,7 +44,7 @@ const Dashboard = () => {
 
   const handleOfferAction = async (offerId, status) => {
       try {
-          await axios.put(`http://localhost:5000/api/offers/${offerId}`, { status });
+          await axios.put(`${API_URL}/offers/${offerId}`, { status });
           // Update local state
           setReceivedOffers(receivedOffers.map(o => o._id === offerId ? { ...o, status } : o));
       } catch (err) {
@@ -54,7 +55,7 @@ const Dashboard = () => {
   const handleDelete = async (id) => {
     if (confirm('Are you sure?')) {
         try {
-            await axios.delete(`http://localhost:5000/api/books/${id}`);
+            await axios.delete(`${API_URL}/books/${id}`);
             setMyListings(myListings.filter(b => b._id !== id));
         } catch(err) {
             alert('Delete failed');

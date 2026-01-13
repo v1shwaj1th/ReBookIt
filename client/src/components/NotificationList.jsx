@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import API_URL from '../config';
 
 const NotificationList = ({ onClose }) => {
   const [notifications, setNotifications] = useState([]);
@@ -17,7 +18,7 @@ const NotificationList = ({ onClose }) => {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/notifications');
+      const res = await axios.get(`${API_URL}/notifications`);
       setNotifications(res.data);
     } catch (err) {
       console.error(err);
@@ -26,20 +27,20 @@ const NotificationList = ({ onClose }) => {
 
   const handleRead = async (id, type, relatedId) => {
     try {
-      await axios.put(`http://localhost:5000/api/notifications/${id}/read`);
+      await axios.put(`${API_URL}/notifications/${id}/read`);
       // Update local state
       setNotifications(notifications.map(n => n._id === id ? { ...n, isRead: true } : n));
       
       if (type === 'payment_due' && relatedId) {
         // Fetch book details
-        const bookRes = await axios.get(`http://localhost:5000/api/books/${relatedId}`);
+        const bookRes = await axios.get(`${API_URL}/books/${relatedId}`);
         const book = bookRes.data;
         let amountToPay = book.price;
 
         if (book.listingType === 'auction') {
             try {
                 // Fetch bids to find the winning bid amount
-                const bidsRes = await axios.get(`http://localhost:5000/api/bids/${relatedId}`);
+                const bidsRes = await axios.get(`${API_URL}/bids/${relatedId}`);
                 const bids = bidsRes.data;
                 // Assuming bids are sorted desc by server or we sort them
                 if (bids.length > 0) {

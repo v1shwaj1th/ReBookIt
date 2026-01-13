@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
+import API_URL from '../config';
 
 const CreateListing = () => {
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ const CreateListing = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/books', data, {
+      await axios.post(`${API_URL}/books`, data, {
         headers: { 
           'Content-Type': 'multipart/form-data',
           'x-auth-token': token

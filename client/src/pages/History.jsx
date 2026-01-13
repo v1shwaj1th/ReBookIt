@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_URL from '../config';
 
 const History = () => {
   const [activeTab, setActiveTab] = useState('buy');
@@ -14,8 +15,8 @@ const History = () => {
         const config = { headers: { 'x-auth-token': token } };
 
         const [buyRes, sellRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/transactions/buy-history', config),
-          axios.get('http://localhost:5000/api/transactions/sell-history', config)
+          axios.get(`${API_URL}/transactions/buy-history`, config),
+          axios.get(`${API_URL}/transactions/sell-history`, config)
         ]);
 
         setBuyHistory(buyRes.data);

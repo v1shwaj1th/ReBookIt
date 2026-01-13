@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link, useSearchParams } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import API_URL from '../config';
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,7 +27,7 @@ const Search = () => {
   const handleSearch = async (searchQuery) => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/books?search=${searchQuery}`);
+      const res = await axios.get(`${API_URL}/books?search=${searchQuery}`);
       setBooks(res.data);
     } catch (err) {
       console.error(err);

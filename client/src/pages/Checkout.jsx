@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
+import API_URL from '../config';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -33,7 +34,7 @@ const CheckoutForm = ({ bookId, amount }) => {
       setIsProcessing(false);
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
       try {
-        await axios.post('http://localhost:5000/api/payment/confirm-payment', {
+        await axios.post(`${API_URL}/payment/confirm-payment`, {
             paymentIntentId: paymentIntent.id
         }, {
              headers: { 'x-auth-token': localStorage.getItem('token') }

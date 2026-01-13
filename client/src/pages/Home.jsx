@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import API_URL from '../config';
 
 const Home = () => {
   const [books, setBooks] = useState([]);
@@ -10,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/books');
+        const res = await axios.get(`${API_URL}/books`);
         setBooks(res.data);
       } catch (err) {
         console.error(err);
